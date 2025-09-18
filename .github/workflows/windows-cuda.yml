@@ -18,17 +18,26 @@ jobs:
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'   # Use '3.13.0-rc' until stable is available
+          python-version: '3.13'
 
-      - name: Install CUDA 12.9
-        # Note: CUDA 12.9 may not be available via choco yet. Adjust to actual installation method if needed.
+      - name: Download CUDA 12.9 network installer
         run: |
-          choco install cuda --version=12.9.0 --pre
-        continue-on-error: true
+          Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.0/network_installers/cuda_12.9.0_windows_network.exe" -OutFile "cuda_installer.exe"
+        shell: pwsh
+
+      - name: Install CUDA 12.9 (silent)
+        run: |
+          Start-Process -Wait -FilePath .\cuda_installer.exe -ArgumentList "--silent"
+        shell: pwsh
+
+      - name: Add CUDA to PATH
+        run: |
+          echo "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: pwsh
 
       - name: Verify CUDA installation
         run: nvcc --version
-        continue-on-error: true
+        shell: pwsh
 
       - name: Install Python dependencies
         run: |
@@ -37,8 +46,7 @@ jobs:
           if exist requirements.txt pip install -r requirements.txt
 
       - name: Build SageAttention extension
-        run: |
-          python setup.py install
+        run: python setup.py install
 
       - name: Check Python version
         run: python --version
