@@ -20,9 +20,9 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Download CUDA 12.9 network installer
+      - name: Download CUDA 12.9 offline installer
         run: |
-          Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.0/network_installers/cuda_12.9.0_windows_network.exe" -OutFile "cuda_installer.exe"
+          Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_windows.exe" -OutFile "cuda_installer.exe"
         shell: pwsh
 
       - name: Install CUDA 12.9 (silent, with logging)
@@ -61,4 +61,3 @@ jobs:
 
       - name: Check Python version
         run: python --version
-        
