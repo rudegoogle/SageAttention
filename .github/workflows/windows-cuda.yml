@@ -29,6 +29,7 @@ jobs:
         run: |
           Start-Process -Wait -FilePath .\cuda_installer.exe -ArgumentList "--silent --loglevel=info --logfile=cuda_install.log"
         shell: pwsh
+        continue-on-error: true
 
       - name: Show CUDA install log tail
         run: |
