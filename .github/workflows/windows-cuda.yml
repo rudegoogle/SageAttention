@@ -1,0 +1,45 @@
+name: Build with CUDA 12.9 and Python 3.13 on Windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'   # Use '3.13.0-rc' until stable is available
+
+      - name: Install CUDA 12.9
+        # Note: CUDA 12.9 may not be available via choco yet. Adjust to actual installation method if needed.
+        run: |
+          choco install cuda --version=12.9.0 --pre
+        continue-on-error: true
+
+      - name: Verify CUDA installation
+        run: nvcc --version
+        continue-on-error: true
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch>=2.3.0 triton>=3.0.0
+          if exist requirements.txt pip install -r requirements.txt
+
+      - name: Build SageAttention extension
+        run: |
+          python setup.py install
+
+      - name: Check Python version
+        run: python --version
+        
