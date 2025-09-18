@@ -25,9 +25,19 @@ jobs:
           Invoke-WebRequest -Uri "https://developer.download.nvidia.com/compute/cuda/12.9.0/network_installers/cuda_12.9.0_windows_network.exe" -OutFile "cuda_installer.exe"
         shell: pwsh
 
-      - name: Install CUDA 12.9 (silent)
+      - name: Install CUDA 12.9 (silent, with logging)
         run: |
-          Start-Process -Wait -FilePath .\cuda_installer.exe -ArgumentList "--silent"
+          Start-Process -Wait -FilePath .\cuda_installer.exe -ArgumentList "--silent --loglevel=info --logfile=cuda_install.log"
+        shell: pwsh
+
+      - name: Show CUDA install log tail
+        run: |
+          if (Test-Path .\cuda_install.log) {
+            Write-Output "=== Last 100 lines of cuda_install.log ==="
+            Get-Content .\cuda_install.log -Tail 100
+          } else {
+            Write-Output "cuda_install.log not found."
+          }
         shell: pwsh
 
       - name: Add CUDA to PATH
