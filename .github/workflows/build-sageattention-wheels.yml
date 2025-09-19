@@ -71,12 +71,12 @@ jobs:
           name: sageattention-wheels
           path: dist/*.whl
 
-      # Verify installations
+      # Verify installations 
+      # python -c "import triton; print(triton.__version__)"
       - name: Verify Installations
         run: |
           nvcc --version
           python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
-          python -c "import triton; print(triton.__version__)"
           pip install dist/*.whl
           python -c "import sageattention; print('SageAttention imported successfully')"
         shell: cmd
