@@ -3,12 +3,6 @@
 name: Build SageAttention Wheels for Windows
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:  # Allows manual triggering
 
 
@@ -28,7 +22,7 @@ jobs:
 
       # Install CUDA 12.8
       - name: Install CUDA Toolkit
-        uses: Jimver/cuda-toolkit@v0.2.14
+        uses: Jimver/cuda-toolkit@v0.2.27
         with:
           cuda: '12.8.0'
           method: 'network'
