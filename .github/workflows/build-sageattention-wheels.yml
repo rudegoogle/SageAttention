@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-wheels:
-    runs-on: windows-2019  # Use Windows runner for compatibility
+    runs-on: windows-latest  # Use Windows runner for compatibility
     steps:
       # Checkout the repository code
       - name: Checkout code
