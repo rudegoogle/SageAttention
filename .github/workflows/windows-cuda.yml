@@ -1,10 +1,6 @@
 name: Build with CUDA 12.9 and Python 3.13 on Windows
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
