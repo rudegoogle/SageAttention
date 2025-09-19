@@ -27,8 +27,8 @@ jobs:
           cuda: '12.8.0'
           method: 'network'
           sub-packages: '["nvcc", "cudart", "libcublas"]'  # Include necessary CUDA components
-          use-github-cache: true  # Disable caching to avoid path error
-          use-local-cache: true  # Disable caching to avoid path error
+          use-github-cache: false  # Disable caching to avoid path error
+          use-local-cache: false  # Disable caching to avoid path error
 
 
       # Install Visual Studio Build Tools for C++ compilation
