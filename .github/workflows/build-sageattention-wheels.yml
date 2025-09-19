@@ -1,1 +1,91 @@
 
+
+name: Build SageAttention Wheels for Windows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-wheels:
+    runs-on: windows-2019  # Use Windows runner for compatibility
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Python 3.13
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # Install CUDA 12.8
+      - name: Install CUDA Toolkit
+        uses: Jimver/cuda-toolkit@v0.2.14
+        with:
+          cuda: '12.8.0'
+          method: 'network'
+          sub-packages: '["nvcc", "cudart", "libcublas"]'  # Include necessary CUDA components
+
+      # Install Visual Studio Build Tools for C++ compilation
+      - name: Install Visual Studio Build Tools
+        run: |
+          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+        shell: powershell
+
+      # Install PyTorch 2.7.1 with CUDA 12.8
+      - name: Install PyTorch
+        run: |
+          pip install torch==2.7.1+cu128 torchvision==0.22.1+cu128 --index-url https://download.pytorch.org/whl/cu128
+        shell: cmd
+
+      # Install Triton and wheel-building dependencies
+      - name: Install Triton and Build Tools
+        run: |
+          pip install triton>=3.0.0 wheel setuptools
+        shell: cmd
+
+      # Build SageAttention wheel
+      - name: Build SageAttention Wheel
+        run: |
+          python setup.py bdist_wheel
+        shell: cmd
+        working-directory: ./
+
+      # List generated wheels
+      - name: List Wheels
+        run: |
+          dir dist
+        shell: cmd
+
+      # Upload wheels as artifacts
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: sageattention-wheels
+          path: dist/*.whl
+
+      # Verify installations
+      - name: Verify Installations
+        run: |
+          nvcc --version
+          python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+          python -c "import triton; print(triton.__version__)"
+          pip install dist/*.whl
+          python -c "import sageattention; print('SageAttention imported successfully')"
+        shell: cmd
+
+      # Optional: Run CogVideoX example
+      - name: Run CogVideoX Example
+        run: |
+          cd example
+          python cogvideox-2b.py --compile --attention_type sage
+        shell: cmd
+        env:
+          CUDA_LAUNCH_BLOCKING: 1
+        continue-on-error: true  # Example may require additional setup
