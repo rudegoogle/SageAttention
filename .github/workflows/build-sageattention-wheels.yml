@@ -48,7 +48,7 @@ jobs:
       #  run: |
       #    pip install triton>=3.0.0 wheel setuptools
         run: |
-          pip install wheel setuptools
+          pip install wheel setuptools packaging
         shell: cmd
 
       # Build SageAttention wheel
