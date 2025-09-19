@@ -45,8 +45,10 @@ jobs:
 
       # Install Triton and wheel-building dependencies
       - name: Install Triton and Build Tools
+      #  run: |
+      #    pip install triton>=3.0.0 wheel setuptools
         run: |
-          pip install triton>=3.0.0 wheel setuptools
+          pip install wheel setuptools
         shell: cmd
 
       # Build SageAttention wheel
@@ -80,11 +82,11 @@ jobs:
         shell: cmd
 
       # Optional: Run CogVideoX example
-      - name: Run CogVideoX Example
-        run: |
-          cd example
-          python cogvideox-2b.py --compile --attention_type sage
-        shell: cmd
-        env:
-          CUDA_LAUNCH_BLOCKING: 1
-        continue-on-error: true  # Example may require additional setup
+      # name: Run CogVideoX Example
+      #  run: |
+      #    cd example
+      #    python cogvideox-2b.py --compile --attention_type sage
+      #  shell: cmd
+      #  env:
+      #    CUDA_LAUNCH_BLOCKING: 1
+      #  continue-on-error: true  # Example may require additional setup
