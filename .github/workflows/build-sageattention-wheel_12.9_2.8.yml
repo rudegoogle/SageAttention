@@ -40,7 +40,7 @@ jobs:
       # Install PyTorch 2.8 with CUDA 12.9
       - name: Install PyTorch
         run: |
-          pip install install torch torchvision --index-url https://download.pytorch.org/whl/cu129
+          pip install install torch==2.8.0 torchvision --index-url https://download.pytorch.org/whl/cu129
         shell: cmd
 
       # Install Triton and wheel-building dependencies
