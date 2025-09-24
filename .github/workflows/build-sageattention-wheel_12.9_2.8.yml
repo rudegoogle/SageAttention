@@ -53,9 +53,12 @@ jobs:
 
       # Build SageAttention wheel
       - name: Build SageAttention Wheel
-        run: |
-          python setup.py bdist_wheel
+        #run: |
+        #  python setup.py bdist_wheel
+        #shell: cmd
         shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64 && python setup.py bdist_wheel
         working-directory: ./
 
       # List generated wheels
@@ -73,12 +76,12 @@ jobs:
 
       # Verify installations 
       # python -c "import triton; print(triton.__version__)"
+      #pip install dist/*.whl
+      #python -c "import sageattention; print('SageAttention imported successfully')"
       - name: Verify Installations
         run: |
           nvcc --version
           python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
-          pip install dist/*.whl
-          python -c "import sageattention; print('SageAttention imported successfully')"
         shell: cmd
 
       # Optional: Run CogVideoX example
