@@ -37,10 +37,10 @@ jobs:
           choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
         shell: powershell
 
-      # Install PyTorch 2.8 with CUDA 12.9
+      # Install PyTorch 2.8.0 with CUDA 12.9
       - name: Install PyTorch
         run: |
-          pip install install torch==2.8.0+cu129 torchvision==0.23.0+cu129 --index-url https://download.pytorch.org/whl/cu129
+          pip install torch==2.8.0+cu129 torchvision==0.23.0+cu129 --index-url https://download.pytorch.org/whl/cu129
         shell: cmd
 
       # Install Triton and wheel-building dependencies
