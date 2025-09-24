@@ -1,6 +1,6 @@
 
 
-name: Build SageAttention Wheels for Windows
+name: Build SageAttention Wheels for Windows CUDA 12.8 Pytorch 2.7.1
 
 on:
   workflow_dispatch:  # Allows manual triggering
