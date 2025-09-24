@@ -20,11 +20,11 @@ jobs:
         with:
           python-version: '3.13'
 
-      # Install CUDA 12.8
+      # Install CUDA 12.9
       - name: Install CUDA Toolkit
         uses: N-Storm/cuda-toolkit@v0.2.27m #Jimver/cuda-toolkit@v0.2.24
         with:
-          cuda: '12.8.0'
+          cuda: '12.9.0'
           #method: 'network'
           #sub-packages: '["nvcc", "cudart", "libcublas"]'  # Include necessary CUDA components
           use-github-cache: false  # Disable caching to avoid path error
@@ -37,10 +37,10 @@ jobs:
           choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
         shell: powershell
 
-      # Install PyTorch 2.7.1 with CUDA 12.8
+      # Install PyTorch 2.8 with CUDA 12.9
       - name: Install PyTorch
         run: |
-          pip install torch==2.7.1+cu128 torchvision==0.22.1+cu128 --index-url https://download.pytorch.org/whl/cu128
+          pip install install torch torchvision --index-url https://download.pytorch.org/whl/cu129
         shell: cmd
 
       # Install Triton and wheel-building dependencies
