@@ -51,6 +51,13 @@ jobs:
           pip install wheel setuptools packaging
         shell: cmd
 
+      - name: Locate VS Build Tools
+        id: vs
+        shell: pwsh
+        run: |
+           $path = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+           echo "VSINSTALLDIR=$path" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       # Build SageAttention wheel
       - name: Build SageAttention Wheel
         #run: |
@@ -58,7 +65,8 @@ jobs:
         #shell: cmd
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64 && python setup.py bdist_wheel
+          call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
+          python setup.py bdist_wheel 
         working-directory: ./
 
       # List generated wheels
