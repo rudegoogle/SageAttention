@@ -32,10 +32,10 @@ jobs:
 
 
       # Install Visual Studio Build Tools for C++ compilation
-      - name: Install Visual Studio Build Tools
-        run: |
-          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
-        shell: powershell
+      #- name: Install Visual Studio Build Tools
+      #  run: |
+      #    choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+      #  shell: powershell
 
       # Install PyTorch 2.7.1 with CUDA 12.8
       - name: Install PyTorch
@@ -52,11 +52,37 @@ jobs:
         shell: cmd
 
       # Build SageAttention wheel
-      - name: Build SageAttention Wheel
+      #- name: Build SageAttention Wheel
+      #  run: |
+      #    python setup.py bdist_wheel
+      #  shell: cmd
+      #  working-directory: ./
+
+      - name: Locate VS Build Tools
+        id: vs
+        shell: pwsh
         run: |
-          python setup.py bdist_wheel
+          $path = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          # Ensure trailing backslash (if missing), and strip whitespace
+          if (-not $path.EndsWith("\")) { $path = "$path\" }
+          echo "VSINSTALLDIR=$($path.Trim())" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      
+      - name: Build SageAttention Wheel
         shell: cmd
+        env:
+          DISTUTILS_USE_SDK: "1"
+        run: |
+          echo VSINSTALLDIR is "%VSINSTALLDIR%"
+          call "%VSINSTALLDIR%VC\Auxiliary\Build\vcvars64.bat"
+          echo PATH after vcvars:
+          echo %PATH%
+          where cl
+          dir "%VSINSTALLDIR%VC\Tools\MSVC"
+          python --version
+          python setup.py bdist_wheel
         working-directory: ./
+      
 
       # List generated wheels
       - name: List Wheels
