@@ -32,10 +32,10 @@ jobs:
 
 
       # Install Visual Studio Build Tools for C++ compilation
-      - name: Install Visual Studio Build Tools
-        run: |
-          choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
-        shell: powershell
+      #- name: Install Visual Studio Build Tools
+      #  run: |
+      #    choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+      #  shell: powershell
 
       # Install PyTorch 2.8.0 with CUDA 12.9
       - name: Install PyTorch
@@ -65,16 +65,16 @@ jobs:
           DISTUTILS_USE_SDK: "1"
         run: |
           echo VSINSTALLDIR is "%VSINSTALLDIR%"
-          if not exist "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat" (
-            echo vcvars64.bat not found!
-            dir "%VSINSTALLDIR%\VC\Auxiliary\Build"
-            exit 1
-          )
           call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
+          echo PATH after vcvars:
+          echo %PATH%
           where cl
           python --version
           python setup.py bdist_wheel
         working-directory: ./
+
+
+        
       # List generated wheels
       - name: List Wheels
         run: |
