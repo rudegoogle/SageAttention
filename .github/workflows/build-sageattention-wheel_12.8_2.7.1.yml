@@ -99,12 +99,12 @@ jobs:
 
       # Verify installations 
       # python -c "import triton; print(triton.__version__)"
+      # pip install dist/*.whl
+      # python -c "import sageattention; print('SageAttention imported successfully')" 
       - name: Verify Installations
         run: |
           nvcc --version
           python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
-          pip install dist/*.whl
-          python -c "import sageattention; print('SageAttention imported successfully')"
         shell: cmd
 
       # Optional: Run CogVideoX example
