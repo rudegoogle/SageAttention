@@ -31,11 +31,6 @@ jobs:
           #use-local-cache: false  # Disable caching to avoid path error
 
 
-      # Install Visual Studio Build Tools for C++ compilation
-      #- name: Install Visual Studio Build Tools
-      #  run: |
-      #    choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
-      #  shell: powershell
 
       # Install PyTorch 2.8.0 with CUDA 12.9
       - name: Install PyTorch
@@ -55,24 +50,28 @@ jobs:
         id: vs
         shell: pwsh
         run: |
-           $path = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-           echo "VSINSTALLDIR=$path" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      # Build SageAttention wheel
+          $path = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          echo "VSINSTALLDIR=$($path.Trim())" | Out-File -FilePath $env:GITHUB_ENV -Append
+      
       - name: Build SageAttention Wheel
         shell: cmd
         env:
           DISTUTILS_USE_SDK: "1"
         run: |
           echo VSINSTALLDIR is "%VSINSTALLDIR%"
+          if not exist "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat" (
+            echo vcvars64.bat not found!
+            dir "%VSINSTALLDIR%\VC\Auxiliary\Build"
+            exit 1
+          )
           call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
           echo PATH after vcvars:
           echo %PATH%
           where cl
+          dir "%VSINSTALLDIR%\VC\Tools\MSVC"
           python --version
           python setup.py bdist_wheel
         working-directory: ./
-
 
         
       # List generated wheels
