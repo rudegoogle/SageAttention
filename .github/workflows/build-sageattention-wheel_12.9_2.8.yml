@@ -60,16 +60,21 @@ jobs:
 
       # Build SageAttention wheel
       - name: Build SageAttention Wheel
-        #run: |
-        #  python setup.py bdist_wheel
-        #shell: cmd
         shell: cmd
+        env:
+          DISTUTILS_USE_SDK: "1"
         run: |
+          echo VSINSTALLDIR is "%VSINSTALLDIR%"
+          if not exist "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat" (
+            echo vcvars64.bat not found!
+            dir "%VSINSTALLDIR%\VC\Auxiliary\Build"
+            exit 1
+          )
           call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
-          set DISTUTILS_USE_SDK=1
-          python setup.py bdist_wheel 
+          where cl
+          python --version
+          python setup.py bdist_wheel
         working-directory: ./
-
       # List generated wheels
       - name: List Wheels
         run: |
