@@ -44,11 +44,16 @@ jobs:
         shell: cmd
 
       # Install Triton and wheel-building dependencies
-      - name: Install Triton and Build Tools
+      - name: Install Build Tools
       #  run: |
       #    pip install triton>=3.0.0 wheel setuptools
         run: |
           pip install wheel setuptools packaging
+        shell: cmd
+        
+      - name: Install Triton
+        run: |
+          pip install install -U "triton-windows<3.4"
         shell: cmd
 
       # Build SageAttention wheel
