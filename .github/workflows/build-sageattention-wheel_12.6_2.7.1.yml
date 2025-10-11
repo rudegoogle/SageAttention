@@ -20,7 +20,7 @@ jobs:
 
       # Install CUDA 12.6
       - name: Install CUDA Toolkit
-        uses: Jimver/cuda-toolkit@v0.2.28 #N-Storm/cuda-toolkit@v0.2.27m
+        uses: N-Storm/cuda-toolkit@v0.2.28 #Jimver/cuda-toolkit@v0.2.28
         with:
           cuda: '12.6.0'
           #method: 'network'
