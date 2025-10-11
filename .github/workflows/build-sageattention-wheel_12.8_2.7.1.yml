@@ -54,7 +54,7 @@ jobs:
         
       - name: Install Triton
         run: |
-          pip install install -U "triton-windows<3.4"
+          pip install -U "triton-windows<3.4"
         shell: cmd
 
       # Build SageAttention wheel
