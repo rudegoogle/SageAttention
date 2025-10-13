@@ -87,7 +87,7 @@ jobs:
           dir "%VSINSTALLDIR%VC\Tools\MSVC"
           python --version
           python setup.py bdist_wheel
-        working-directory: ./
+        working-directory: ./sageattention3_blackwell
       
 
       # List generated wheels
