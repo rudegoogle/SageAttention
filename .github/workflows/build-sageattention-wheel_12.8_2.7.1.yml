@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v5
 
       # Set up Python 3.13
-      - name: Set up Python 3.13.8
+      - name: Set up Python 3.13.5
         uses: actions/setup-python@v6
         with:
           python-version: '3.13.5'
@@ -75,6 +75,7 @@ jobs:
 
       
       - name: Build SageAttention Wheel
+        # python setup.py bdist_wheel
         shell: cmd
         env:
           DISTUTILS_USE_SDK: "1"
@@ -86,7 +87,7 @@ jobs:
           where cl
           dir "%VSINSTALLDIR%VC\Tools\MSVC"
           python --version
-          python setup.py bdist_wheel
+          pip wheel . --no-build-isolation -w dist 
         working-directory: ./
       
 
