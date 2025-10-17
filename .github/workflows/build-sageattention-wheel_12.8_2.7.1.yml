@@ -87,7 +87,7 @@ jobs:
           where cl
           dir "%VSINSTALLDIR%VC\Tools\MSVC"
           python --version
-          pip wheel . --no-build-isolation -w dist 
+          pip wheel . --no-build-isolation -w dist --verbose
         working-directory: ./
       
 
