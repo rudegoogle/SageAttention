@@ -79,6 +79,7 @@ jobs:
         shell: cmd
         env:
           DISTUTILS_USE_SDK: "1"
+          MAX_JOBS: "1"
         run: |
           echo VSINSTALLDIR is "%VSINSTALLDIR%"
           call "%VSINSTALLDIR%VC\Auxiliary\Build\vcvars64.bat"
