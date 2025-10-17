@@ -79,7 +79,8 @@ jobs:
         shell: cmd
         env:
           DISTUTILS_USE_SDK: "1"
-          MAX_JOBS: "2"
+          MAX_JOBS: "1"
+          CMAKE_GENERATOR: "Ninja"
         run: |
           echo VSINSTALLDIR is "%VSINSTALLDIR%"
           call "%VSINSTALLDIR%VC\Auxiliary\Build\vcvars64.bat"
@@ -88,7 +89,7 @@ jobs:
           where cl
           dir "%VSINSTALLDIR%VC\Tools\MSVC"
           python --version
-          pip wheel . --no-build-isolation -w dist --verbose
+          pip wheel . -w dist --verbose
         working-directory: ./
       
 
