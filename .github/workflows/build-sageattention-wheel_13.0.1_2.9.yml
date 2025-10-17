@@ -54,7 +54,7 @@ jobs:
         
       - name: Install Triton
         run: |
-          pip install -U "triton-windows<3.4"
+          pip install -U "triton-windows<3.6"
         shell: cmd
 
       # Build SageAttention wheel
@@ -87,7 +87,7 @@ jobs:
           where cl
           dir "%VSINSTALLDIR%VC\Tools\MSVC"
           python --version
-          pip wheel . --no-build-isolation -w dist 
+          pip wheel . --no-build-isolation -w dist --verbose
         working-directory: ./
       
 
