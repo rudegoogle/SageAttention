@@ -58,12 +58,12 @@ if not SKIP_CUDA_BUILD:
         "-diag-suppress=174",
     ]
     
-    if os.name == "nt":
-    # https://github.com/pytorch/pytorch/issues/148317
-    NVCC_FLAGS += [
-        "-D_WIN32=1",
-        "-DUSE_CUDA=1",
-    ]
+    #if os.name == "nt":
+    ## https://github.com/pytorch/pytorch/issues/148317
+    #NVCC_FLAGS += [
+    #    "-D_WIN32=1",
+    #    "-DUSE_CUDA=1",
+    #]
 
     # Append flags from env if provided
     cxx_append = os.getenv("CXX_APPEND_FLAGS", "").strip()
