@@ -61,7 +61,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.13.8'
+          python-version: '3.13.11'
 
       # https://github.com/Jimver/cuda-toolkit/issues/395
       # - uses: Jimver/cuda-toolkit@v0.2.22    N-Storm/cuda-toolkit@v0.2.28
