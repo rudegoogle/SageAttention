@@ -66,7 +66,21 @@ if not SKIP_CUDA_BUILD:
     #    "-D_WIN32=1",
     #    "-DUSE_CUDA=1",
     #]
-
+    # Windows specific flags
+    
+    if sys.platform == "win32":
+        CXX_FLAGS += [
+            "/Zc:preprocessor", 
+            "/DCCCL_IGNORE_MSVC_TRADITIONAL_PREPROCESSOR_WARNING",
+            "-DUSE_CUDA", 
+            "-Usmall"
+        ]
+        NVCC_FLAGS += [
+            "-Xcompiler", "/Zc:preprocessor",
+            "-Xcompiler", "/DCCCL_IGNORE_MSVC_TRADITIONAL_PREPROCESSOR_WARNING",
+            "-DUSE_CUDA", 
+            "-Usmall"
+        ]
     # Append flags from env if provided
     cxx_append = os.getenv("CXX_APPEND_FLAGS", "").strip()
     if cxx_append:
@@ -75,9 +89,9 @@ if not SKIP_CUDA_BUILD:
     if nvcc_append:
         NVCC_FLAGS += nvcc_append.split()
 
-    ABI = 1 if torch._C._GLIBCXX_USE_CXX11_ABI else 0
-    CXX_FLAGS += [f"-D_GLIBCXX_USE_CXX11_ABI={ABI}"]
-    NVCC_FLAGS += [f"-D_GLIBCXX_USE_CXX11_ABI={ABI}"]
+    #!!! ABI = 1 if torch._C._GLIBCXX_USE_CXX11_ABI else 0
+    #!!! CXX_FLAGS += [f"-D_GLIBCXX_USE_CXX11_ABI={ABI}"]
+    #!!! NVCC_FLAGS += [f"-D_GLIBCXX_USE_CXX11_ABI={ABI}"]
 
     if CUDA_HOME is None:
         raise RuntimeError(
@@ -186,7 +200,7 @@ if not SKIP_CUDA_BUILD:
                     "csrc/qattn/pybind_sm80.cpp",
                     "csrc/qattn/qk_int_sv_f16_cuda_sm80.cu",
                 ],
-                extra_compile_args={"cxx": CXX_FLAGS, "nvcc": NVCC_FLAGS},
+                extra_compile_args={"cxx": CXX_FLAGS[:], "nvcc": NVCC_FLAGS[:]},
             )
         )
 
@@ -204,7 +218,7 @@ if not SKIP_CUDA_BUILD:
                     "csrc/qattn/sm89_qk_int8_sv_f8_accum_f32_fuse_v_scale_attn_inst_buf.cu",
                     "csrc/qattn/sm89_qk_int8_sv_f8_accum_f16_fuse_v_scale_attn_inst_buf.cu",
                 ],
-                extra_compile_args={"cxx": CXX_FLAGS, "nvcc": NVCC_FLAGS},
+                extra_compile_args={"cxx": CXX_FLAGS[:], "nvcc": NVCC_FLAGS[:]},
             )
         )
 
@@ -216,7 +230,7 @@ if not SKIP_CUDA_BUILD:
                     "csrc/qattn/pybind_sm90.cpp",
                     "csrc/qattn/qk_int_sv_f8_cuda_sm90.cu",
                 ],
-                extra_compile_args={"cxx": CXX_FLAGS, "nvcc": NVCC_FLAGS},
+                extra_compile_args={"cxx": CXX_FLAGS[:], "nvcc": NVCC_FLAGS[:]},
                 extra_link_args=['-lcuda'],
             )
         )
@@ -225,7 +239,7 @@ if not SKIP_CUDA_BUILD:
         CUDAExtension(
             name="sageattention._fused",
             sources=["csrc/fused/pybind.cpp", "csrc/fused/fused.cu"],
-            extra_compile_args={"cxx": CXX_FLAGS, "nvcc": NVCC_FLAGS},
+            extra_compile_args={"cxx": CXX_FLAGS[:], "nvcc": NVCC_FLAGS[:]},
         )
     )
 
